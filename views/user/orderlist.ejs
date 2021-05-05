@@ -1,0 +1,72 @@
+<%- include('../include/header') %>
+
+<div class="container mx-auto px-4 sm:px-8 max-w-3xl">
+    <div class="pt-8">
+        <div class="flex flex-row mb-1 sm:mb-0 justify-between w-full">
+            <h2 class="text-2xl leading-tight">
+                Orders
+            </h2>
+            <div class="text-end">
+                <form class="flex w-full max-w-sm space-x-3">
+                    <div class=" relative ">
+                        <input type="text" id="&quot;form-subscribe-Filter" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="name"/>
+                    </div>
+                    <button class="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200" type="submit">
+                        Filter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="container px-4 shadow border rounded-lg border-gray-100">
+    <div class="overflow-x-auto">
+        <table class="w-full whitespace-nowrap">
+            <thead>
+            <tr class="bg-gray-50 h-16 w-full text-sm leading-none text-gray-800">
+                <th class="font-normal text-left pl-8">Date</th>
+                <th class="font-normal text-left px-10 lg:px-6 xl:px-0">Product</th>
+                <th class="font-normal text-left px-10 lg:px-6 xl:px-0">Amount</th>
+                <th class="font-normal text-left px-10 lg:px-6 xl:px-0">Customer</th>
+                <th class="font-normal text-left px-10 lg:px-6 xl:px-0">Order #</th>
+                <th class="font-normal text-left px-10 lg:px-6 xl:px-0">Status</th>
+                <th class="font-normal text-left">Confirmation</th>
+            </tr>
+            </thead>
+            <tbody class="w-full">
+            <% if (data.orderlist.length) { %>
+            <% for( let index = 0; index < data.orderlist.length; index++ ) { %>
+            <tr class="h-20 text-sm leading-none text-gray-800 border-b border-gray-100">
+                <td class="pl-8">06/02/2020</td>
+                <td class="font-medium px-10 lg:px-6 xl:px-0">
+                    <%- data.orderlist[index].productId.title %>
+                    <p class="text-gray-600 font-normal mt-2">PID: 982 0192</p>
+                </td>
+                <td class="px-10 lg:px-6 xl:px-0">
+                    <%- data.orderlist[index].productId.price *  data.orderlist[index].quantity %>
+                </td>
+                <td class="font-medium px-10 lg:px-6 xl:px-0">
+                    Samantha Smith
+                    <p class="text-gray-600 font-normal mt-2">samantha@gmail.com</p>
+                </td>
+                <td class="px-10 lg:px-6 xl:px-0">
+                    <p class="underline text-blue-500">WMC0191</p>
+                </td>
+                <td class="px-10 lg:px-6 xl:px-0">
+                    <div class="flex items-center justify-center w-20 h-6 bg-yellow-100 rounded-full">
+                        <p class="text-xs leading-3 text-yellow-600">Pending</p>
+                    </div>
+                </td>
+                <td>
+                    <button class="flex items-center justify-center px-4 py-3 w-32 h-9 bg-indigo-50 hover:bg-indigo-100 rounded focus:outline-none">
+                        <p class="text-sm leading-none text-indigo-700">Confirm Order</p>
+                    </button>
+                </td>
+            </tr>
+            <% } %>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<%- include('../include/header') %>
+<!-- Sidebar starts -->
+<!-- Remove class [ hidden ] and replace [ sm:flex ] with [ flex ] -->
+<!-- Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border -->
+<div class="w-2/4 mx-auto my-auto">
+    <!-- Place your content here -->
+
+
+    <form action="#" method="POST">
+        <div class="shadow sm:rounded-md sm:overflow-hidden">
+            <div class="py-6 space-y-6 bg-white px-auto sm:p-6">
+                <div class='md:flex md:justify-between'>
+                    <div>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Add Product</h3>
+                        <p class="mt-1 text-sm text-gray-500">Please fill up the information about products
+                            share.</p>
+                    </div>
+                    <div>
+                        <a class='px-4 py-2 bg-gray-600 text-gray-100 rounded shadow-md hover:shadow-lg focus:bg-black' href="/admin/productlist/">Product List</a>
+                    </div>
+                </div>
+
+
+                <div class="grid grid-cols-3 gap-6">
+
+
+                    <div class="col-span-3">
+                        <label for="products" class="block mb-2 text-sm font-medium text-gray-700">
+                            Products Name </label>
+                        <div class="">
+                            <input type="text" name='name' id="productName"
+                                   class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                   placeholder="Product Name" />
+                        </div>
+                        <div class="">
+                            <input type="text" name='price' id="productName"
+                                   class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                   placeholder="price" />
+                        </div>
+                        <div class="">
+                            <input type="text" name='description' id="productName"
+                                   class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                   placeholder="description" />
+                        </div>
+                        <div class="">
+                            <input type="text" name='imageURL' id="productName"
+                                   class="flex-1 w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 bg-white border border-gray-300 shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                   placeholder="Imageurl" />
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="col-span-3">
+                        <label class="block text-sm font-medium text-gray-700">
+                            Product Photo
+                        </label>
+                        <div class="flex justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none"
+                                     viewBox="0 0 48 48"
+                                     aria-hidden="true">
+                                    <path
+                                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload"
+                                           class="relative font-medium text-indigo-600 bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">
+                                    PNG, JPG, GIF up to 10MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
+                <button type="submit"
+                        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Save
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    <%- include('../include/footer') %>
+</div>

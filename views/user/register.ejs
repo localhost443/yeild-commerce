@@ -1,0 +1,111 @@
+<%- include('../include/header') %>
+<div class='bg-white'>
+    <div class='mx-4 my-4 shadow-lg px-4 py-8 sm:w-1/2 md:w-1/3 xl:w-1/5 sm:mx-auto'>
+        <div class='mb-2 border-b-2 border-green-400 pb-2'>
+            <h1 class='text-center text-gray-800 tracking-wide text-2xl font-semibold'>Register</h1>
+        </div>
+        <form action='#' method='post'>
+
+            <div class="  ">
+                <label for="required-name" class="text-gray-700">
+                    Name
+                    <span class="text-red-500 required-dot">
+            *
+        </span>
+                </label>
+                <input type="text" id="required-name"
+                       class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                       name="name" placeholder="Your name" />
+            </div>
+
+
+            <div class="  ">
+                <label for="required-username" class="text-gray-700">
+                    Username
+                    <span class="text-red-500 required-dot">
+            *
+        </span>
+                </label>
+                <input type="text" id="required-username"
+                       class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                       name="username" placeholder="Your username" />
+            </div>
+
+
+            <div class=" ">
+                <label for="required-email" class="text-gray-700">
+                    Email
+                    <span class="text-red-500 required-dot">
+            *
+        </span>
+                </label>
+                <input type="text" id="required-email"
+                       class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                       name="email" placeholder="Your email" />
+            </div>
+
+
+            <div class="  ">
+                <label for="required-password" class="text-gray-700">
+                    Password
+                    <span class="text-red-500 required-dot">
+            *
+        </span>
+                </label>
+                <input type="text" id="required-password"
+                       class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                       name="password" placeholder="Password" />
+                <!--                <div class="grid w-full h-1 grid-cols-12 gap-4 mt-3">-->
+                <!--                    <div class="h-full col-span-3 bg-green-500 rounded">-->
+                <!--                    </div>-->
+                <!--                    <div class="h-full col-span-3 bg-green-500 rounded">-->
+                <!--                    </div>-->
+                <!--                    <div class="h-full col-span-3 bg-green-500 rounded">-->
+                <!--                    </div>-->
+                <!--                    <div class="h-full col-span-3 bg-gray-200 rounded dark:bg-dark-1">-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+            <div class="  ">
+                <label for="required-confirmPassword" class="text-gray-700">
+                    Confirm Password
+                    <span class="text-red-500 required-dot">
+            *
+        </span>
+                </label>
+                <input onkeyup='checkPassword()' type="text" id="required-confirmPassword"
+                       class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                       name="confirmPassword" placeholder="Confirm Password" />
+                <div id='' class="mt-2">
+                    <span id='passwordVText' class='hidden'></span>
+                </div>
+            </div>
+
+
+            <button onclick='showAnimation()' type="submit"
+                    class="mt-3 py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                <svg width="20" id='RegisterAnimation' height="20" fill="currentColor" class=" hidden mr-2 animate-spin"
+                     viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+                    </path>
+                </svg>
+                Register
+            </button>
+            <div class=''><p class='text-center p-1 text-lg font-semibold'> Or </p></div>
+            <div class=''>
+                <button type='button' onclick='showLoginAnimation()'
+                        class="flex mx-auto px-6 py-2 block  transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                    <svg width="20" id='loginAnimation' height="20" fill="currentColor"
+                         class="z-10 hidden mr-2 animate-spin" viewBox="0 0 1792 1792"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
+                        </path>
+                    </svg>
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../include/footer') %>

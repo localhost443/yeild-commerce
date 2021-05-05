@@ -1,0 +1,35 @@
+<%- include('include/header')  %> 
+
+<div class='grid grid-cols-2 w-10/12 mx-auto mt-5'>
+    <div class='w-4/12'>
+        <div class="overflow-hidden shadow-lg rounded-lg h-90 w-60 md:w-80 cursor-pointer m-auto">
+            <a href="#" class="w-full block h-full">
+                <img alt="blog photo" src="/images/blog/1.jpg" class="max-h-40 w-full object-cover"/>
+                <div class="bg-white dark:bg-gray-800 w-full p-4">
+                    <p class="text-indigo-500 text-md font-medium">
+                    </p>
+                    <p class="text-gray-800 dark:text-white text-xl font-medium mb-2">
+                        <%= data.result.title %>
+                    </p>
+                    <p class="text-gray-400 dark:text-gray-300 font-light text-md">
+                        <%= data.result.description %>
+                    </p>
+                </div>
+            </a>
+            <a href="/admin/edit/<%= data.result._id %>">
+                <button class=" px-6 py-2  transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                    Edit
+                </button>
+            </a>
+            <a href="/admin/delete/<%= data.result._id %>">
+                <button class=" px-6 py-2  transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                    Delete
+                </button>
+            </a>
+        </div>
+
+    </div>
+    <div class='w-6/12'>
+
+    </div>
+</div>
