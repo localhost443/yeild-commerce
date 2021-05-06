@@ -1,60 +1,17 @@
 'use strict';
 const lodash = require('lodash');
+const userAuth = require('../helper/UserLoggedIn')
 const stripe = require('stripe')('sk_test_wpSquKlgmFNsOYGuTiAJGXLe00aVSD5GUj');
 
 const User = require('../model/User');
 /**
  * User Login and Register related logic goes here
  */
-exports.register = (req, res) => {
-  const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
-  res.render('user/register', {
-    data: {
-      title: 'Please Register',
-      session
-    }
-  });
-};
 
-exports.registration = (req, res) => {
-  // console.log(req.body);
-  const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
-  let name = req.body.name, username = req.body.username, email = req.body.email, p1 = req.body.password,
-    p2 = req.body.confirmPassword;
-  if (p1 === p2) {
-    if (name && username && email) {
-      let user = new User({
-        name, username, email,
-        password: p1
-      });
-      user.save().then(() => {
-        res.redirect('/shop/');
-      })
-        .catch((error) => console.log(error));
-    }
-  }
-};
 
-exports.login = (req, res) => {
-  const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
-  if(session === true) {
-    res.redirect('/orders/');
-  } else {
-    res.render('user/login', {
-      data: {
-        title: 'Please Login',
-        session
-      }
-    });
-  }
-};
 
-exports.userLogin = (req, res) => {
-  // console.log(req.body);
-  // res.end('Data Recieved');
-  req.session.isLoggedIn = true;
-  res.redirect('/shop/');
-};
+
+
 
 exports.addToCart = (req, res) => {
   const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
@@ -155,9 +112,3 @@ exports.orderList = (req, res) => {
     });
 };
 
-exports.logout = (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login/');
-  });
-
-};

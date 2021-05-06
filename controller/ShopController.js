@@ -2,7 +2,8 @@
 const User = require('../model/User')
 const Product = require('../model/Product');
 exports.shop = (req, res) => {
-  const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
+  let session;
+  req.session.isLoggedIn ? session = req.session.isLoggedIn : session = false;
   Product.find().then((products) => {
     // console.log(req.user);
     // console.log(products);
