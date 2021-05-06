@@ -15,7 +15,7 @@ const saltRounds = 10;
 
 
 exports.register = (req, res) => {
-  if(req.session.isLoggedIn) {
+  if (req.session.isLoggedIn) {
     res.redirect('shop');
   }
   res.render('user/register', {
@@ -42,8 +42,8 @@ exports.registration = (req, res) => {
               }
             });
           } else {
-            bcrypt.genSalt(saltRounds, function(err, salt) {
-              bcrypt.hash(p1, salt, function(err, hash) {
+            bcrypt.genSalt(saltRounds, function (err, salt) {
+              bcrypt.hash(p1, salt, function (err, hash) {
                 let user = new User({
                   name, username, email,
                   password: hash
@@ -62,43 +62,60 @@ exports.registration = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  let session = req.session;
-  if (session === true) {
+  if (req.sessions.isLoggedIn) {
     res.redirect('/orders/');
   } else {
     res.render('user/login', {
       data: {
         title: 'Please Login',
-        session,
-        cToken : req.csrfToken(),
+        cToken: req.csrfToken(),
       }
     });
   }
 };
 
 exports.userLogin = (req, res) => {
-  console.log(req.body.email, req.body.password);
-  User.findOne({email: req.body.email})
-    .then((User) => {
-      if(User && User.password) {
-        bcrypt.compare(req.body.password, User.password, function(err, result) {
-          console.log(err, result);
-          if(result === true) {
-            console.log('Result is true');
-            req.session.isLoggedIn = true;
-            req.session.user = User;
-            req.session.save(err => console.log(err));
-            res.redirect('/shop/');
+  if (req.sessions.isLoggedIn) {
+    res.redirect('/orders/');
+  } else {
+    if (!req.body.email || !req.body.password) {
+      res.render('user/login', {
+        data: {
+          title: 'Please Login',
+          cToken: req.csrfToken(),
+          message: "Email and Password is Required"
+        }
+      });
+    }
+    User.findOne({email: req.body.email})
+      .then((User) => {
+        if (User && User.password) {
+          bcrypt.compare(req.body.password, User.password, function (err, result) {
+            console.log(err, result);
+            if (result === true) {
+              console.log('Result is true');
+              req.session.isLoggedIn = true;
+              req.session.userId = User._id;
+              req.session.save(err => console.log(err));
+              res.redirect('/shop/');
+            }
+          });
+        } else {
+          res.render('user/login', {
+            data: {
+              title: 'Please Login',
+              cToken: req.csrfToken(),
+              message: "Invalid Email Or Password"
+            }
+          });
+        }
+      })
 
-          }
-        });
-      }
-    })
-
-  // console.log(req.body);
-  // res.end('Data Recieved');
-  // req.session.isLoggedIn = true;
-  // res.redirect('/shop/');
+    // console.log(req.body);
+    // res.end('Data Recieved');
+    // req.session.isLoggedIn = true;
+    // res.redirect('/shop/');
+  }
 };
 
 exports.logout = (req, res) => {

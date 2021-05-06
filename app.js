@@ -6,6 +6,7 @@ const mongoDBsession = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const bodyparser = require('body-parser');
 const dir = require('./helper/dir');
+const User = require('./model/User');
 
 /**
  * Importing required files to work with expressjs
@@ -15,7 +16,6 @@ const dir = require('./helper/dir');
 const routeAdmin = require('./routes/AdminRoute');
 const UserRoute = require('./routes/UserRoute');
 const routeUser = require('./routes/ShopRoute');
-
 
 
 const conn = 'mongodb://localhost:27017/myshop';
@@ -51,9 +51,29 @@ app.use(session({
   store: store
 }));
 
+app.use((req, res, next) => {
+  if (req.session.isLoggedIn) {
+    User.findById(req.session.userId)
+      .then((user) => {
+        req.user = user;
+        // console.log(req.session);
+        next();
+      })
+  } else {
+    next()
+  }
+})
+
+
 
 let csrfProtection = csrf(undefined);
 app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  req.session.isLoggedIn ? res.locals.isLoggedIn = true : res.locals.isLoggedIn = false
+  res.locals.csrfTokens = req.csrfToken()
+  next()
+})
 /**
  * serve static files
  */

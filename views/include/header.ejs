@@ -24,10 +24,12 @@
                     class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
                 <a href="/checkout/">Checkout</a>
             </p>
+            <%if (isLoggedIn === true) { %>
             <p
                     class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
                 <a href="/orders/">Orders</a>
             </p>
+            <% } %>
           <p
             class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
             <a href="/shop/">Shop</a>
@@ -37,7 +39,7 @@
               <button onclick='openCart()'>Cart</button>
           </p>
 
-            <%if (data.session !== true) { %>
+            <%if (isLoggedIn !== true) { %>
                 <p
                         class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
                     <a href="/login">Login</a>
@@ -48,12 +50,15 @@
                     <a href="/register">Register</a>
                 </p>
             <% } %>
+            <%if (isLoggedIn === true) { %>
             <form action='/logout/' method='post'>
+                <input type="hidden" name="_csrf" value="<%- csrfTokens %>">
                 <p
                         class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
                 <button class='text-white text-center' type='submit'>Logout</button>
                 </p>
             </form>
+            <% } %>
 
 
 
