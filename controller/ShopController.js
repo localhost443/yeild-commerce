@@ -1,6 +1,7 @@
 'use strict';
 const User = require('../model/User');
 const Product = require('../model/Product');
+const Shop = require('../model/Shop');
 exports.shop = (req, res) => {
   let session;
   req.session.isLoggedIn
@@ -32,7 +33,54 @@ exports.SingleProduct = (req, res) => {
 };
 
 exports.createShop = (req, res) => {
+  let isShopAvailable = req.user.isReallyShopOwner();
   if (req.method === 'GET') {
-    console.log('****', req.user.isReallyShopOwner(), '*****');
+    let usershopid = req.user.shopName;
+    if (usershopid) {
+      Product.find({ shopName: usershopid }).then((products) => {
+        return res.render('user/shop', {
+          data: {
+            title: 'Your Personal Shop',
+            products: products,
+          },
+        });
+      });
+    }
+    if (isShopAvailable === false) {
+      req.flash(
+        'info',
+        'Shop functions is not available for you, Please register as shop owner'
+      );
+      return res.redirect('/shop');
+    } else if (isShopAvailable) {
+      if (isShopAvailable.shopOwner === false) {
+        res.render('user/shopRegister', {
+          data: {
+            title: 'Register Your Shop',
+          },
+        });
+      }
+    }
+  }
+  if (req.method === 'POST') {
+    if (req.user.shopName) res.redirect('/yourshop');
+    let name = req.body.shopname;
+    let shop = new Shop({
+      name: name,
+    });
+    shop
+      .save()
+      .then((data) => {
+        req.user.assignShop(data._id);
+      })
+      .then(() => {
+        req.flash(
+          'info',
+          'Yoo! Your Shop has been created, Now you can start adding and selling products'
+        );
+        return res.redirect('/yourshop/');
+      })
+      .catch((err) => console.log(err));
+    console.log(shop);
   }
 };

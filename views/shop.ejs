@@ -1,9 +1,10 @@
 <%- include('include/header')  %> 
 <%- include('include/sidebar')  %> 
-
+<% if(message.info) {%>
+    <div class="text-center text-gray-700 font-bold"> <span><%- message.info%> </span></div>
+<%}%>
 
 <div class="mx-4">
-
     <% if (data.products.length) { %>
     <div class="md:flex ">
     <% for( let index = 0; index < data.products.length; index++ ) { %>

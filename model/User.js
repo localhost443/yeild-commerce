@@ -67,7 +67,7 @@ UserSchema.methods.checkRole = function () {
 
 UserSchema.methods.isReallyShopOwner = function () {
   let role = this.checkRole();
-  //if (role === 'subscriber' || role === false) return false;
+  if (role === 'subscriber' || role === false) return false;
   if (this.shopName) {
     return {
       shopOwner: true,
@@ -75,12 +75,18 @@ UserSchema.methods.isReallyShopOwner = function () {
       role: role,
     };
   } else {
-    return false;
+    return {
+      shopOwner: false,
+      role: this.role,
+      shopId: false,
+    };
   }
 };
 
-UserSchema.assignShop = function (shopname) {
-  if (this.isReallyShopOwner() === false) {
+UserSchema.methods.assignShop = function (shopID) {
+  if (!this.shopName) {
+    this.shopName = shopID;
+    this.save();
   }
 };
 
