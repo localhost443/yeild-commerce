@@ -17,6 +17,7 @@ router.get(
   userAuth.notIsLoggedIn,
   AuthController.resetpass
 );
+router.post('/resetpass/', userAuth.notIsLoggedIn, AuthController.resetpass);
 router.post('/reset/', userAuth.notIsLoggedIn, AuthController.reset);
 
 router.get('/addcart/:productId', UserController.addToCart);

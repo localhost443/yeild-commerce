@@ -94,41 +94,32 @@ exports.login = (req, res) => {
 
 exports.userLogin = (req, res) => {
   if (req.session.isLoggedIn) {
-    res.redirect('/orders/');
+    return res.redirect('/orders/');
   } else {
     if (!req.body.email || !req.body.password) {
-      res.render('user/login', {
-        data: {
-          title: 'Please Login',
-          cToken: req.csrfToken(),
-          message: 'Email and Password is Required',
-        },
-      });
+      req.flash('error', 'User Email or Password Is not Valid');
+      return res.redirect('/login/');
     }
     User.findOne({ email: req.body.email }).then((User) => {
-      if (User && User.password) {
+      if (User) {
         bcrypt.compare(
           req.body.password,
           User.password,
           function (err, result) {
-            console.log(err, result);
-            if (result === true) {
-              console.log('Result is true');
+            if (result) {
               req.session.isLoggedIn = true;
               req.session.userId = User._id;
               req.session.save((err) => console.log(err));
               res.redirect('/shop/');
+            } else {
+              req.flash('error', 'Username or Email Not Found');
+              return res.redirect('/login');
             }
           }
         );
       } else {
-        res.render('user/login', {
-          data: {
-            title: 'Please Login',
-            cToken: req.csrfToken(),
-            message: 'Invalid Email Or Password',
-          },
-        });
+        req.flash('error', 'Username or Email Not Found');
+        return res.redirect('/login');
       }
     });
   }
@@ -199,9 +190,61 @@ exports.reset = (req, res) => {
 };
 
 exports.resetpass = (req, res) => {
-  console.log(req.params.userhash);
-  User.findOne({});
-  res.end('data received');
+  if (req.method === 'GET') {
+    User.findOne({ resetToken: req.params.userhash })
+      .then((user) => {
+        if (user) {
+          if (user.resetExpTime >= Date.now()) {
+            res.render('user/resetpass', {
+              data: {
+                title: 'Reset your password',
+                resetcode: req.params.userhash,
+              },
+            });
+          }
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+  if (req.method === 'POST') {
+    let hashkey = req.body.hashkey;
+    if (!hashkey) return res.redirect('/reset');
+    let email = req.body.email;
+    if (!email) return res.redirect('/resetpass/' + hashkey);
+    let password = req.body.password;
+    if (!password) return res.redirect('/resetpass/' + hashkey);
+    User.findOne({ resetToken: hashkey }).then((user) => {
+      if (user) {
+        if (user.email === email) {
+          bcrypt.genSalt(saltRounds, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
+              user.password = hash;
+              user.save().then(() => {
+                req.flash(
+                  'info',
+                  'Your password has been updated, Please login with new password'
+                );
+                res.redirect('/login/');
+                return transporter
+                  .sendMail({
+                    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+                    to: 'bar@example.com', // list of receivers
+                    subject: 'Hello ✔', // Subject line
+                    text: 'Hello world?', // plain text body
+                    html: 'Your password has been updated', // html body
+                  })
+                  .catch((err) => console.log(err));
+              });
+            });
+          });
+        } else {
+          return res.redirect('/resetpass/' + hashkey);
+        }
+      } else {
+        return res.redirect('/reset');
+      }
+    });
+  }
 };
 
 exports.logout = (req, res) => {
