@@ -12,6 +12,9 @@ router.get('/login/', userAuth.notIsLoggedIn  ,AuthController.login);
 router.post('/login/', userAuth.notIsLoggedIn,  AuthController.userLogin);
 router.post('/logout/', userAuth.isLoggedIn, AuthController.logout);
 
+router.get('/reset/', userAuth.notIsLoggedIn  ,AuthController.reset);
+router.post('/reset/', userAuth.notIsLoggedIn  ,AuthController.reset);
+
 router.get('/addcart/:productId', UserController.addToCart);
 router.get('/removecart/:cartId', UserController.removeFromCart);
 

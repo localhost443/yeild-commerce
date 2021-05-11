@@ -14,6 +14,14 @@ const UserSchema = new Schema({
     type: String,
     require: true
   },
+  resetToken : {
+    type: String,
+    require: false
+  },
+  resetExpTime : {
+    type: Date,
+    required: false
+  },
   password: {
     type: String,
     require: true
@@ -21,6 +29,10 @@ const UserSchema = new Schema({
   role : {
     type: String,
     default: 'subscriber'
+  },
+  shopName : {
+    type: String,
+    required: false
   },
   cart: {
     items: [

@@ -1,4 +1,6 @@
 "use strict"
+const crypto = require('crypto');
+const nodemailer = require("nodemailer");
 /**
  * importing the User modal for some extended functionlities
  * @type {Model<Document>}
@@ -13,6 +15,12 @@ const User = require('../model/User')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+
+let transporter = nodemailer.createTransport({
+  host: "localhost",
+  port: 25,
+  secure: false, // true for 465, false for other ports
+});
 
 exports.register = (req, res) => {
   if (req.session.isLoggedIn) {
@@ -49,11 +57,17 @@ exports.registration = (req, res) => {
                   password: hash
                 });
                 user.save().then(() => {
-                  res.end("data recieved");
+                  res.redirect('/login/');
+                  transporter.sendMail({
+                    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+                    to: "bar@example.com", // list of receivers
+                    subject: "Hello ✔", // Subject line
+                    text: "Hello world?", // plain text body
+                    html: "<b>Hello world?</b>", // html body
+                  });
                 })
               });
             });
-
           }
         })
         .catch(err => console.log(err));
@@ -62,7 +76,7 @@ exports.registration = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  if (req.sessions.isLoggedIn) {
+  if (req.session.isLoggedIn) {
     res.redirect('/orders/');
   } else {
     res.render('user/login', {
@@ -75,7 +89,7 @@ exports.login = (req, res) => {
 };
 
 exports.userLogin = (req, res) => {
-  if (req.sessions.isLoggedIn) {
+  if (req.session.isLoggedIn) {
     res.redirect('/orders/');
   } else {
     if (!req.body.email || !req.body.password) {
@@ -110,13 +124,51 @@ exports.userLogin = (req, res) => {
           });
         }
       })
-
-    // console.log(req.body);
-    // res.end('Data Recieved');
-    // req.session.isLoggedIn = true;
-    // res.redirect('/shop/');
   }
 };
+
+exports.reset = (req, res) => {
+  let renderFile = function (message = null) {
+    res.render('user/reset', {
+      data: {
+        title: "Password Reset",
+        cToken: req.csrfToken(),
+        message: message
+      }
+    })
+  }
+  if (req.method === "GET") {
+    renderFile()
+  }
+  if (req.method === "POST") {
+    if (!req.body.email) {
+      renderFile('Email field is required');
+    } else {
+      User.findOne({email: req.body.email})
+        .then((user) => {
+          if (user) {
+            //console.log(user)
+            crypto.randomBytes(32, (err, buff) => {
+              if (err) renderFile("Something is wrong, Please try later");
+              else {
+                user.resetToken = buff.toString('hex');
+                user.resetExpTime = Date.now() + 3600000;
+                user.save()
+                  .then(() => {
+                    res.send("the request toekn has been saved");
+                  })
+              }
+            })
+          } else {
+            renderFile("This user is not registered, Please Register");
+          }
+        })
+        .catch(err => console.log(err))
+    }
+    console.log(req.body);
+    res.end("POST DATA RECIEVED")
+  }
+}
 
 exports.logout = (req, res) => {
   req.session.destroy(() => {
