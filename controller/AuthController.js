@@ -128,29 +128,28 @@ exports.userLogin = (req, res) => {
 };
 
 exports.reset = (req, res) => {
-  let renderFile = function (message = null) {
+  if (req.method === "GET") {
     res.render('user/reset', {
       data: {
         title: "Password Reset",
         cToken: req.csrfToken(),
-        message: message
       }
     })
   }
-  if (req.method === "GET") {
-    renderFile()
-  }
   if (req.method === "POST") {
     if (!req.body.email) {
-      renderFile('Email field is required');
+      req.flash("error", "You can't leave email box empty")
+      res.redirect('/rest');
     } else {
       User.findOne({email: req.body.email})
         .then((user) => {
           if (user) {
             //console.log(user)
             crypto.randomBytes(32, (err, buff) => {
-              if (err) renderFile("Something is wrong, Please try later");
-              else {
+              req.flash("error", "You can't leave email box empty")
+              if (err) req.flash("error", "Something is wrong, Please try later")
+
+            else {
                 user.resetToken = buff.toString('hex');
                 user.resetExpTime = Date.now() + 3600000;
                 user.save()
