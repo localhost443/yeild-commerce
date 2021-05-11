@@ -1,0 +1,8 @@
+1) Starting Page
+2) view all the products
+3) Create New products
+4) Edit products
+5) Delete Products ( As administrator )
+6) Adding products to shopping cart
+7) Checkout page, purchase the products
+8) As customer , I can see my products

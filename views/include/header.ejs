@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/styles.css">
+  <title><%= data.title %> </title>
+
+</head>
+<body>
+  <div class="bg-gray-700">
+    <div class="mx-8">
+      <div class="flex justify-between p-2">
+        <div>
+          <p
+            class="px-2 py-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+            <a href="#">Home</a>
+          </p>
+        </div>
+        <div class="flex">
+            <p
+                    class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+                <a href="/checkout/">Checkout</a>
+            </p>
+            <%if (isLoggedIn === true) { %>
+            <p
+                    class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+                <a href="/orders/">Orders</a>
+            </p>
+            <% } %>
+          <p
+            class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+            <a href="/shop/">Shop</a>
+          </p>
+          <p
+            class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+              <button onclick='openCart()'>Cart</button>
+          </p>
+
+            <%if (isLoggedIn !== true) { %>
+                <p
+                        class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+                    <a href="/login">Login</a>
+                </p>
+
+                <p
+                        class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+                    <a href="/register">Register</a>
+                </p>
+            <% } %>
+            <%if (isLoggedIn === true) { %>
+            <form action='/logout/' method='post'>
+                <input type="hidden" name="_csrf" value="<%- csrfTokens %>">
+                <p
+                        class="px-2 py-1 mx-1 text-gray-100 border border-gray-500 rounded hover:bg-gray-600 hover:shadow-md focus-within:bg-gray-400">
+                <button class='text-white text-center' type='submit'>Logout</button>
+                </p>
+            </form>
+            <% } %>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%if (data.session === true) { %>
+
+  <% } %>
+
+  
+  <!-- add flex later -->
+  <div class="bg-gray-100 relative">
+      <div id='cart' class='absolute top-0 right-2 ml-3 mt-2 hidden'>
+          <div class="container flex flex-col mx-auto w-full items-center justify-center bg-white dark:bg-gray-800 rounded-lg shadow">
+              <ul class="flex flex-col divide divide-y">
+                  <li class="flex flex-row">
+                      <div class="select-none cursor-pointer flex flex-1 items-center p-4">
+                          <div class="flex flex-col w-10 h-10 justify-center items-center mr-4">
+                              <a href="#" class="block relative">
+                                  <img alt="profil" src="/images/person/6.jpg" class="mx-auto object-cover rounded-full h-10 w-10 "/>
+                              </a>
+                          </div>
+                          <div class="flex-1 pl-1 mr-16">
+                              <div class="font-medium dark:text-white">
+                                  Jean Marc
+                              </div>
+                              <div class="text-gray-600 dark:text-gray-200 text-sm">
+                                  Developer
+                              </div>
+                          </div>
+                          <div class="text-gray-600 dark:text-gray-200 text-xs">
+                              6:00 AM
+                          </div>
+                      </div>
+                  </li>
+              </ul>
+
+              <button type="button" class="py-2 w-2/3 inline-block  my-4 mx-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                  CheckOut
+              </button>
+
+          </div>
+      </div>
