@@ -1,9 +1,11 @@
 'use strict';
-const User = require('../model/User')
+const User = require('../model/User');
 const Product = require('../model/Product');
 exports.shop = (req, res) => {
   let session;
-  req.session.isLoggedIn ? session = req.session.isLoggedIn : session = false;
+  req.session.isLoggedIn
+    ? (session = req.session.isLoggedIn)
+    : (session = false);
   Product.find().then((products) => {
     // console.log(req.user);
     // console.log(products);
@@ -11,8 +13,8 @@ exports.shop = (req, res) => {
       data: {
         title: 'Shop Page',
         products,
-        session
-      }
+        session,
+      },
     });
   });
 };
@@ -23,8 +25,14 @@ exports.SingleProduct = (req, res) => {
     res.render('productpage', {
       data: {
         title: products.title,
-        result : products
-      }
+        result: products,
+      },
     });
   });
+};
+
+exports.createShop = (req, res) => {
+  if (req.method === 'GET') {
+    console.log('****', req.user.isReallyShopOwner(), '*****');
+  }
 };

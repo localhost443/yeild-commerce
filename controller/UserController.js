@@ -1,17 +1,12 @@
 'use strict';
 const lodash = require('lodash');
-const userAuth = require('../helper/UserLoggedIn')
+const userAuth = require('../helper/UserLoggedIn');
 const stripe = require('stripe')('sk_test_wpSquKlgmFNsOYGuTiAJGXLe00aVSD5GUj');
 
 const User = require('../model/User');
 /**
  * User Login and Register related logic goes here
  */
-
-
-
-
-
 
 exports.addToCart = (req, res) => {
   const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
@@ -36,27 +31,36 @@ exports.removeFromCart = (req, res) => {
 };
 
 exports.checkout = (req, res) => {
-  const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
-  req.user.populate('cart.items.productId')
+  if (!req.session.isLoggedIn) {
+    req.flash(
+      'info',
+      'You need to log in or register to use checkout functionalities'
+    );
+    return res.redirect('/login');
+  }
+  req.user
+    .populate('cart.items.productId')
     .execPopulate()
     .then((user) => {
       let totalPrice = 0;
       for (let i = 0; i < user.cart.items.length; i++) {
-        totalPrice = totalPrice + (user.cart.items[i].quantity * user.cart.items[i].productId.price);
+        totalPrice =
+          totalPrice +
+          user.cart.items[i].quantity * user.cart.items[i].productId.price;
       }
       console.log(totalPrice);
       if (req.method === 'POST') {
         async function recievedata() {
           const paymentData = await stripe.paymentIntents.create({
             amount: totalPrice * 100,
-            currency: 'usd'
+            currency: 'usd',
           });
           return paymentData;
         }
 
         recievedata().then((paymentData) => {
           res.send({
-            paymentSecret: paymentData.client_secret
+            paymentSecret: paymentData.client_secret,
           });
         });
       } else {
@@ -64,8 +68,8 @@ exports.checkout = (req, res) => {
           data: {
             title: 'Welcome to checkout',
             products: user.cart.items,
-            name: 'Online Shop'
-          }
+            name: 'Online Shop',
+          },
         });
       }
     });
@@ -77,15 +81,16 @@ exports.success = (req, res) => {
       console.log(data);
       req.user.orders.items.push({
         productId: data.productId,
-        quantity: data.quantity
+        quantity: data.quantity,
       });
     });
     req.user.cart.items = [];
     // req.user.orders.items = [];
-    req.user.save()
+    req.user
+      .save()
       .then(() => console.log('saved'))
       .then(() => console.log(req.user))
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
   res.end('data recieved');
 };
@@ -94,21 +99,21 @@ exports.createOrder = (req, res) => {
   const session = req.session.isLoggedIn ? req.session.isLoggedIn : false;
   res.render('payment', {
     data: {
-      title: 'Please pay now'
-    }
+      title: 'Please pay now',
+    },
   });
 };
 exports.orderList = (req, res) => {
-  req.user.populate('orders.items.productId')
+  req.user
+    .populate('orders.items.productId')
     .execPopulate()
     .then((user) => {
       // console.log(user.orders.items);
       res.render('user/orderlist', {
         data: {
           title: 'Your order List',
-          orderlist: user.orders.items
-        }
+          orderlist: user.orders.items,
+        },
       });
     });
 };
-

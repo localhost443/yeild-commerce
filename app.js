@@ -77,6 +77,7 @@ app.use((req, res, next) => {
   req.session.isLoggedIn
     ? (res.locals.isLoggedIn = true)
     : (res.locals.isLoggedIn = false);
+  req.session.vendor ? (res.locals.vendor = true) : (res.locals.vendor = false);
   res.locals.csrfTokens = req.csrfToken();
   next();
 });

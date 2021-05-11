@@ -1,4 +1,5 @@
 'use strict';
+let debug = true;
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 /**
@@ -23,7 +24,7 @@ let transporter = nodemailer.createTransport({
 
 exports.register = (req, res) => {
   if (req.session.isLoggedIn) {
-    res.redirect('shop');
+    res.redirect('/shop');
   }
   res.render('user/register', {
     data: {
@@ -34,12 +35,14 @@ exports.register = (req, res) => {
 };
 
 exports.registration = (req, res) => {
-  // console.log(req.body);
   let name = req.body.name,
     username = req.body.username,
     email = req.body.email,
     p1 = req.body.password,
     p2 = req.body.confirmPassword;
+  let shop = req.body.shop;
+  let shopExist;
+  shop ? (shopExist = 'vendor') : (shopExist = 'subscriber');
   if (p1 === p2) {
     if (name && username && email) {
       User.findOne({ email: email })
@@ -59,6 +62,7 @@ exports.registration = (req, res) => {
                   username,
                   email,
                   password: hash,
+                  role: shopExist,
                 });
                 user.save().then(() => {
                   res.redirect('/login/');
@@ -74,7 +78,9 @@ exports.registration = (req, res) => {
             });
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (debug) console.log(err);
+        });
     }
   }
 };
@@ -109,6 +115,7 @@ exports.userLogin = (req, res) => {
             if (result) {
               req.session.isLoggedIn = true;
               req.session.userId = User._id;
+              if (User.role === 'vendor') req.session.vendor = true;
               req.session.save((err) => console.log(err));
               res.redirect('/shop/');
             } else {
@@ -208,17 +215,25 @@ exports.resetpass = (req, res) => {
   }
   if (req.method === 'POST') {
     let hashkey = req.body.hashkey;
-    if (!hashkey) return res.redirect('/reset');
+    if (!hashkey) res.redirect('/reset');
     let email = req.body.email;
-    if (!email) return res.redirect('/resetpass/' + hashkey);
+    if (!email) {
+      req.flash('error', "Email field can't be left empty");
+      return res.redirect('/resetpass/' + hashkey);
+    }
     let password = req.body.password;
-    if (!password) return res.redirect('/resetpass/' + hashkey);
+    if (!password) {
+      req.flash('error', "password field can't be left empty");
+      return res.redirect('/resetpass/' + hashkey);
+    }
     User.findOne({ resetToken: hashkey }).then((user) => {
       if (user) {
         if (user.email === email) {
           bcrypt.genSalt(saltRounds, function (err, salt) {
             bcrypt.hash(password, salt, function (err, hash) {
               user.password = hash;
+              user.resetExpTime = null;
+              user.resetToken = null;
               user.save().then(() => {
                 req.flash(
                   'info',
