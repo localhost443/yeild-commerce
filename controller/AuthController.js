@@ -155,7 +155,17 @@ exports.reset = (req, res) => {
                 user.resetExpTime = Date.now() + 3600000;
                 user.save()
                   .then(() => {
-                    res.send("the request toekn has been saved");
+                    return transporter.sendMail({
+                      from: '"Fred Foo 👻" <foo@example.com>', // sender address
+                      to: user.email, // list of receivers
+                      subject: "Password Reset Token ✔", // Subject line
+                      text: "Hello, Someone has requested a password reset token for you please follow the link to get it " + user.resetToken, // plain text body
+                      html: "<a href='localhost/resetpass/"+ user.resetToken +"' />", // html body
+                    });
+                  })
+                  .then(() => {
+                    req.flash('info', 'if the email exist in our database, Please check your inbox/spam folder')
+                    res.redirect('/login')
                   })
               }
             })
@@ -165,8 +175,6 @@ exports.reset = (req, res) => {
         })
         .catch(err => console.log(err))
     }
-    console.log(req.body);
-    res.end("POST DATA RECIEVED")
   }
 }
 

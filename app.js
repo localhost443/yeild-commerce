@@ -7,6 +7,7 @@ const csrf = require('csurf');
 const bodyparser = require('body-parser');
 const dir = require('./helper/dir');
 const User = require('./model/User');
+let flash = require('connect-flash');
 
 /**
  * Importing required files to work with expressjs
@@ -63,11 +64,17 @@ app.use((req, res, next) => {
     next()
   }
 })
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.message = req.flash()
+  next()
+})
+
 
 
 
 let csrfProtection = csrf(undefined);
-app.use(csrfProtection);
+app.use(csrfProtection, );
 
 app.use((req, res, next) => {
   req.session.isLoggedIn ? res.locals.isLoggedIn = true : res.locals.isLoggedIn = false
