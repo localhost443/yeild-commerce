@@ -2,6 +2,7 @@
 let debug = true;
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { body, validationResult } = require('express-validator');
 /**
  * importing the User modal for some extended functionlities
  * @type {Model<Document>}
@@ -102,6 +103,11 @@ exports.userLogin = (req, res) => {
   if (req.session.isLoggedIn) {
     return res.redirect('/orders/');
   } else {
+    body('email').isEmail();
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+    }
     if (!req.body.email || !req.body.password) {
       req.flash('error', 'User Email or Password Is not Valid');
       return res.redirect('/login/');
