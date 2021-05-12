@@ -3,7 +3,6 @@
 <% if(message.info) {%>
     <div class="text-center text-gray-700 font-bold"> <span><%- message.info%> </span></div>
 <%}%>
-
 <div class="mx-4">
     <% if (data.products.length) { %>
     <div class="md:flex ">
@@ -18,7 +17,6 @@
                             <p class="text-lg"><%= data.products[index].title%></p>
 <!--                            <p class='text-sm font-thin'><%= data.products[index].description %></p>-->
                         </div>
-                        <% if(data.session === true) { %>
 
                         <div>
                             <a href='/addcart/<%= data.products[index]._id%>'><button type='submit'>
@@ -36,15 +34,24 @@
                                 </button></a>
 
                         </div>
-                            <% } %>
+
                     </div>
                     <div class='flex justify-between items-baseline'>
-                        <p class="pt-1 text-gray-900"><%= data.products[index].price %></p>
+                        <p class="pt-1 text-gray-900"> PRICE : <%= data.products[index].price %></p>
                         <p class='border border-blue-400 rounded px-3 '><a href="<%= data.products[index]._id %>">See Info</a></p>
                     </div>
 
+
+
                 </a>
+                <% if ( String(data.products[index].shopName) === String(data.user)) { %>
+                    <div class="flex pb-0 mb-0">
+                        <div class="justify-evenly border border-green-400 items-center mx-2 px-3 my-1 py-1 "><a href="/admin/edit/<%-data.products[index]._id%>">Edit</a></div>
+                        <div class="justify-evenly border border-green-400 items-center mx-2 px-3 my-1 py-1 "><a href="/admin/delete/<%-data.products[index]._id%>">Delete</a></div>
+                    </div>
+                <% } %>
             </div>
+
 
 
 
@@ -57,12 +64,12 @@
 
 
 <% } else { %>
-<div class="relative px-6 py-4 mb-4 text-white bg-red-500 border-0 rounded">
+<div class="px-6 py-4 mb-4 text-white bg-red-500 border-0 rounded">
     <span class="inline-block mr-5 text-xl align-middle">
-        <i class="fas fa-bell" />
+        <i class="fas fa-bell"></i>
     </span>
     <span class="inline-block mr-8 align-middle">
-        <b class="capitalize">ERROR</b> NO PRODUCTS FOUND
+        <span class="capitalize font-bold">ERROR</span> NO PRODUCTS FOUND
     </span>
 
 </div>

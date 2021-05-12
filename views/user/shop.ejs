@@ -43,6 +43,12 @@
                         </div>
 
                     </a>
+                    <% if ( String(data.products[index].shopName) === String(data.user)) { %>
+                        <div class="flex pb-0 mb-0">
+                            <div class="justify-evenly border border-green-400 items-center mx-2 px-3 my-1 py-1 "><a href="/admin/edit/<%-data.products[index]._id%>">Edit</a></div>
+                            <div class="justify-evenly border border-green-400 items-center mx-2 px-3 my-1 py-1 "><a href="/admin/delete/<%-data.products[index]._id%>">Delete</a></div>
+                        </div>
+                    <% } %>
                 </div>
 
 

@@ -3,10 +3,8 @@ const User = require('../model/User');
 const Product = require('../model/Product');
 const Shop = require('../model/Shop');
 exports.shop = (req, res) => {
-  let session;
-  req.session.isLoggedIn
-    ? (session = req.session.isLoggedIn)
-    : (session = false);
+  let userCanDelete = false;
+  if (req.user) if (req.user.shopName) userCanDelete = req.user.shopName;
   Product.find().then((products) => {
     // console.log(req.user);
     // console.log(products);
@@ -14,7 +12,7 @@ exports.shop = (req, res) => {
       data: {
         title: 'Shop Page',
         products,
-        session,
+        user: userCanDelete,
       },
     });
   });
@@ -33,6 +31,8 @@ exports.SingleProduct = (req, res) => {
 };
 
 exports.createShop = (req, res) => {
+  let userCanDelete = false;
+  if (req.user) if (req.user.shopName) userCanDelete = req.user.shopName;
   let isShopAvailable = req.user.isReallyShopOwner();
   if (req.method === 'GET') {
     let usershopid = req.user.shopName;
@@ -42,6 +42,7 @@ exports.createShop = (req, res) => {
           data: {
             title: 'Your Personal Shop',
             products: products,
+            user: userCanDelete,
           },
         });
       });
