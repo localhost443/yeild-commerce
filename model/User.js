@@ -90,6 +90,10 @@ UserSchema.methods.assignShop = function (shopID) {
   }
 };
 
+UserSchema.methods.hasShop = function () {
+  if (this.shopName) return this.shopName;
+  return false;
+};
 UserSchema.methods.addToCart = function (productId, q = 1) {
   let isFoundInProducts = false;
   let z = this.cart.items.map((data, index) => {
