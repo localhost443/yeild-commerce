@@ -36,6 +36,16 @@ exports.register = (req, res) => {
 };
 
 exports.registration = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).render('user/register', {
+      data: {
+        title: 'Please Register',
+        errorMessages: errors.array()[0].msg,
+      },
+    });
+  }
   let name = req.body.name,
     username = req.body.username,
     email = req.body.email,
@@ -46,42 +56,29 @@ exports.registration = (req, res) => {
   shop ? (shopExist = 'vendor') : (shopExist = 'subscriber');
   if (p1 === p2) {
     if (name && username && email) {
-      User.findOne({ email: email })
-        .then((UserDoc) => {
-          if (UserDoc && UserDoc.email === email) {
-            res.render('user/register', {
-              data: {
-                title: 'Please Register',
-                isRegistered: 'This email is already in our database',
-              },
+      bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(p1, salt, function (err, hash) {
+          let user = new User({
+            name,
+            username,
+            email,
+            password: hash,
+            role: shopExist,
+          });
+          user.save().then(() => {
+            res.redirect('/login/');
+            transporter.sendMail({
+              from: '"Fred Foo 👻" <foo@example.com>', // sender address
+              to: 'bar@example.com', // list of receivers
+              subject: 'Hello ✔', // Subject line
+              text: 'Hello world?', // plain text body
+              html: '<b>Hello world?</b>', // html body
             });
-          } else {
-            bcrypt.genSalt(saltRounds, function (err, salt) {
-              bcrypt.hash(p1, salt, function (err, hash) {
-                let user = new User({
-                  name,
-                  username,
-                  email,
-                  password: hash,
-                  role: shopExist,
-                });
-                user.save().then(() => {
-                  res.redirect('/login/');
-                  transporter.sendMail({
-                    from: '"Fred Foo 👻" <foo@example.com>', // sender address
-                    to: 'bar@example.com', // list of receivers
-                    subject: 'Hello ✔', // Subject line
-                    text: 'Hello world?', // plain text body
-                    html: '<b>Hello world?</b>', // html body
-                  });
-                });
-              });
-            });
-          }
-        })
-        .catch((err) => {
-          if (debug) console.log(err);
+          });
         });
+      });
+    } else {
+      res.redirect('register');
     }
   }
 };

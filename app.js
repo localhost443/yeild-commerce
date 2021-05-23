@@ -111,11 +111,13 @@ app.use((req, res, next) => {
 /**
  * starting the server with mongoose
  */
+
+const PORT = 80;
 mongoose
   .connect(conn, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((r) => {
-    app.listen(80, () => {
-      console.log(`Server started on port http://localhost:8000`);
+    app.listen(PORT, () => {
+      console.log(`Server started on port http://localhost:${PORT}`);
     });
   })
   .catch((err) => console.log(err));
